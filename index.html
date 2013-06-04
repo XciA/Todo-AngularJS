@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" ng-app>
+<!--  AngularJs Boundary Definition | divs | body | html | accordingly-->
+<head>
+<meta charset="utf-8">
+ <title>PlanIT | Your Daily Schedule Manager</title>
+    <!-- Asset Files Linking -->
+   <favicon></favicon>
+    <script src="angular.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="planner.js"></script>
+    <link rel="stylesheet" href="todo.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+    <link rel="stylesheet" media="print" href="print.css">
+    <!-- media queries here -->
+
+                       <!-- Next version
+	<link rel="stylesheet" href="../css/elusive-webfont.css">-->
+</head>
+<body>
+<!-- The Header Goes here  Container that is centrally located {Reference Twitter.Bootstrap}-->
+<div class="container">
+       <legend> <h1 class="anim">PlanIT<small class="red">Your Daily Schedule Manager &ltVersion 1&gt</small></h1>
+       </legend>
+     </div>
+<!-- For The Main Body 2 Fluid Container Used Sidebar 3 Coloumn and Main body 9 Coloumn-->
+<div class="row-fluid" ng-controller="PlanIt">
+<!--Attached A MVC controller TodoCtrl -->
+    <div class="span3">
+        <!-- Fuction addtodo defined in TodoCtrl Is Called when Submit Is invoked  -->
+        <!-- Inputs are 1)todo Custom Definition 2)Small desc on That 3)Priority that May be Added. Highest goes On Top
+         -->
+        <form ng-submit="addTodo()" class="forms1">
+ <p class="grey">Scheduler</p>
+            <input type="text" ng-model="todoText"
+                   placeholder="Add Todo" required>
+            <input type="text" ng-model="sbj" name="des"
+                   placeholder="Description"  ng-maxlength=20>
+				   <p class="grey">Priority</p>
+            <select ng-model="priority">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
+            </br>
+              <button class="btn btn-primary" type="submit">Schedule</button>
+            <button class="btn" type="reset">Reset</button></form>
+              <div class="alert alert-info">
+            <!-- AngularJs Service that Selects Item And Return Items From Same $scope -->
+            <h4>Search Todo</h4>
+            <input ng-model="query" type="text" placeholder="Search">
+        </div>
+
+        </div>
+    <!-- Main Content Starts Here -->
+    <div class="span9">
+        <p class=lead>Manage your custom daily schedule on our TodoApp</p>
+        <!-- A Division To Show How Many of the item Are yet to Be Done From Total -->
+        <div class="alert alert-success">
+            <span><strong>{{remaining()}}</strong> of <strong>{{todos.length}}</strong> remaining</span>
+            </div>
+        <!-- here orderby Is user That Can Arrange In Both Direction On Toggle | Again a Service from AngularJs-->
+        <button class="btn btn-small btn-primary" type="button"ng-click="attr = 'text'; reverse=!reverse">OrderByTodo</button>
+        <button class="btn btn-small" type="button"  ng-click="attr = 'priority'; reverse=!reverse">OrderByPriority</button>
+				 </br>
+        <!--  Table view to showthe contents can be fetched locally or over http connection  -->
+        <table class="table table-hover">
+            <tr class="descri">
+                <th>Todo</th>
+                <th>Description</th>
+                <th>Priority</th>
+                <th>Checkout</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="todo in todos | filter:query | orderBy:attr:reverse">
+                <th><span class="done-{{todo.done}}">{{todo.text}}</span></th>
+                <th><span class="done-{{todo.done}}">{{todo.desc}}</span></th>
+                <th><span class="done-{{todo.done}}">{{todo.priority}}</span>
+				</th>
+                <th><input type="checkbox" ng-model="todo.done"></th>
+                <th>
+                <button class="btn" ng-click="alert()">edit</button>
+                <button class="btn" id="tra" ng-click="trash($index)">trash It</button>
+                </th>
+            </tr>
+        </table>
+        <button class="btn btn-success" ng-click="completed()">Remove Completed</button>
+    </div>
+</div>
+</body>
+</html>
